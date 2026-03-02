@@ -401,15 +401,30 @@ export default function App() {
 
     // Draw Explosions
     state.explosions.forEach(exp => {
+      ctx.save();
+      // Add glow effect
+      ctx.shadowBlur = 20;
+      ctx.shadowColor = 'rgba(0, 191, 255, 0.8)';
+
       const gradient = ctx.createRadialGradient(exp.x, exp.y, 0, exp.x, exp.y, exp.radius);
-      gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
-      gradient.addColorStop(0.4, 'rgba(255, 165, 0, 0.6)');
-      gradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
+      gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+      gradient.addColorStop(0.2, 'rgba(100, 220, 255, 0.9)'); // Cyan-blue
+      gradient.addColorStop(0.5, 'rgba(0, 150, 255, 0.6)');   // Sky blue
+      gradient.addColorStop(1, 'rgba(0, 0, 255, 0)');         // Transparent Blue
       
       ctx.fillStyle = gradient;
       ctx.beginPath();
       ctx.arc(exp.x, exp.y, exp.radius, 0, Math.PI * 2);
       ctx.fill();
+
+      // Energy ring
+      ctx.strokeStyle = `rgba(0, 255, 255, ${0.4 * (1 - exp.radius / exp.maxRadius)})`;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(exp.x, exp.y, exp.radius, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      ctx.restore();
     });
 
   }, []);
