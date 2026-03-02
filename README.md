@@ -1,4 +1,4 @@
-# Victor Nova Defense
+# Victor星空防御大战 (Victor Starry Defense War)
 
 一个经典《导弹指挥官》风格的塔防游戏。
 

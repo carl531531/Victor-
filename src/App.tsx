@@ -46,7 +46,7 @@ export default function App() {
 
   const t = {
     zh: {
-      title: 'Victor新星防御',
+      title: 'Victor星空防御大战',
       start: '开始游戏',
       restart: '再玩一次',
       win: '胜利！你成功保卫了地球',
@@ -58,7 +58,7 @@ export default function App() {
       targetScore: '目标得分',
     },
     en: {
-      title: 'Victor Nova Defense',
+      title: 'Victor Starry Defense War',
       start: 'Start Game',
       restart: 'Play Again',
       win: 'Victory! Earth is safe',
