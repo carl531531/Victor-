@@ -331,15 +331,53 @@ export default function App() {
 
     // Draw Rockets
     state.rockets.forEach(rocket => {
-      ctx.strokeStyle = '#ef4444';
+      // Draw trail
+      ctx.strokeStyle = 'rgba(239, 68, 68, 0.2)';
       ctx.lineWidth = 1;
+      ctx.setLineDash([5, 5]);
       ctx.beginPath();
       ctx.moveTo(rocket.start.x, rocket.start.y);
       ctx.lineTo(rocket.current.x, rocket.current.y);
       ctx.stroke();
-      
+      ctx.setLineDash([]);
+
+      // Fireball glow
+      const glow = ctx.createRadialGradient(
+        rocket.current.x, rocket.current.y, 0,
+        rocket.current.x, rocket.current.y, 12
+      );
+      glow.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+      glow.addColorStop(0.2, 'rgba(251, 191, 36, 0.8)'); // yellow
+      glow.addColorStop(0.5, 'rgba(249, 115, 22, 0.6)'); // orange
+      glow.addColorStop(1, 'rgba(239, 68, 68, 0)'); // red transparent
+
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(rocket.current.x, rocket.current.y, 12, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Fireball core
       ctx.fillStyle = '#fff';
-      ctx.fillRect(rocket.current.x - 1, rocket.current.y - 1, 2, 2);
+      ctx.beginPath();
+      ctx.arc(rocket.current.x, rocket.current.y, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Flame particles (simple tail)
+      for (let i = 0; i < 3; i++) {
+        const offset = (i + 1) * 4;
+        const dx = rocket.target.x - rocket.start.x;
+        const dy = rocket.target.y - rocket.start.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const ratio = offset / dist;
+        
+        const px = rocket.current.x - (dx * ratio);
+        const py = rocket.current.y - (dy * ratio);
+        
+        ctx.fillStyle = `rgba(249, 115, 22, ${0.6 - i * 0.2})`;
+        ctx.beginPath();
+        ctx.arc(px, py, 6 - i * 1.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
     });
 
     // Draw Missiles
